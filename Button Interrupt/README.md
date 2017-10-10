@@ -30,3 +30,30 @@ Notice that since the FR5994 has it's buttons on PORT5 that the interrupt vector
 ``` PORT_5 ``` on the line reading ``` __interrupt void PORT_5(void) ``` is an arbitrary variable name, and was named so for ease of reading the code.
 
 The flag is cleared again inside the ISR ``` P5IFG &= ~BIT5; ``` and the interrupt edge is toggled by XORing the interrupt edge select with BIT5 ``` P5IES ^= BIT5; ```. This is done so that as long as the button is being held, a new interrupt occurs nearly instantaneously, causing the LED to stay on as long as the button is pressed.
+
+# Extra Work: 8-bit counter
+For this project, an 8bit LED counter was designed using a timer ISR. The code is very simple. A breadboard was required.
+
+## Implementation
+Port 3 was used for the LED output:
+```c
+P3DIR = 0xff;
+P3OUT &= ~0xff;
+```
+Using the timer interrupt code from Timer A blink, the entire P3OUT register is incremented every time the interrupt is entered:
+```c
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void Timer_A (void)
+{
+      if(rollover1>=50) // 10ms * num, where rollover>=num (10ms * 100 = 1s blink period)
+      {
+          P1OUT ^= BIT0;                            // Toggle P1.0
+          P3OUT++;  //meat of the program, outputs to LEDs as the register counts up.
+          rollover1 = 0;
+      }
+      rollover1++;
+}
+```
+For the breadboard, LEDs and resistors were used. 
+
+[here](https://imgur.com/a/HSeqj) is a gif demonstrating the counter. Note that LSB is on the left and the MSB is on the right. Binary counting is usually done right to left. If you wanted to recreate this with proper binary counting (LSB on the right), wire the pins to the LEDs the opposite way that I did.
