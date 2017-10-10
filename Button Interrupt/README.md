@@ -2,7 +2,7 @@
 # LAB 3: Button Interrupt
   Polling is a very power inefficient way of detecting a button press. In polling, the processor is constantly checking to see if the button has been pressed, which means the processor is constantly executing code and thus using power. An interrupt solves this issue. The interrupt serves as a way to detect a button press at any time in the code, eliminating polling. After an interrupt occurs, an interrupt function is entered called an "interrupt service routine" or "ISR".
   
-## Usage:
+## Implementation:
 While polling requires less setup: the button's pin simply needs to be set as an input, and maybe have a pull-up resistor, a button interrupt requires some additional specification to work properly:
 ```c
 P5DIR &= ~BIT5; //SET P5.5 AS INPUT
