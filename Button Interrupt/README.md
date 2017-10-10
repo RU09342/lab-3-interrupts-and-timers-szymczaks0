@@ -25,8 +25,8 @@ __interrupt void PORT_5(void)
     P5IES ^= BIT5; //TOGGLE INTERRUPT EDGE
 }
 ```
-Notice that since the FR5994 has it's buttons on PORT5 that the interrupt vector is ``` PORT5\_Vector ```. This is renamed for the different boards as ``` #pragma vector=PORTx_VECTOR ``` where x is the port number that the button set up for interrupts is on.
+Notice that since the FR5994 has it's buttons on PORT5 that the interrupt vector is ``` PORT5_Vector ```. This is renamed for the different boards as ``` #pragma vector=PORTx_VECTOR ``` where x is the port number that the button set up for interrupts is on.
 
-``` PORT\_5 ``` on the line reading ``` __interrupt void PORT_5(void) ``` is an arbitrary variable name, and was named so for ease of reading the code.
+``` PORT_5 ``` on the line reading ``` __interrupt void PORT_5(void) ``` is an arbitrary variable name, and was named so for ease of reading the code.
 
 The flag is cleared again inside the ISR ``` P5IFG &= ~BIT5; ``` and the interrupt edge is toggled by XORing the interrupt edge select with BIT5 ``` P5IES ^= BIT5; ```. This is done so that as long as the button is being held, a new interrupt occurs nearly instantaneously, causing the LED to stay on as long as the button is pressed.
