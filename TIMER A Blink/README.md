@@ -39,7 +39,7 @@
   * MC\_UP sets the TA0CTL register to up mode
   * TA0CTL is the timer A0 control register that dictates how Timer A0 will function
 #### As mentioned before, the NAMES of these registers change from board to board, and Timer A must be substituted for Timer B on the FR2311 as it does not have a Timer A.
-## Usage
+## Implementation
 ```c
 TA0CCTL0 = CCIE;                             // CCR0 interrupt enabled
   TA0CCR0 = 10000;                             //overflow every 10ms
