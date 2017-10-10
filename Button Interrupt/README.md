@@ -1,30 +1,32 @@
-# Button Interrupt
-Last lab you were introduced to the idea of "Polling" where in you would constantly check the status of the P1IN register to see if something has changed. While your code may have worked, it ends up spending a ton of time just checking something that has not changed. What we can do instead is use another two registers available to us from the GPIO peripheral, P1IE and P1IES, to allow our processor to just chill out and wait until something happens to act upon it. Without spending too much space on this README with explanations, what makes these interrupts tick is the following code:
-
-'''c
-#pragma vector=PORT1_VECTOR
-__interrupt void Port_1(void)
+#### Stephen Szymczak
+# LAB 3: Button Interrupt
+  Polling is a very power inefficient way of detecting a button press. In polling, the processor is constantly checking to see if the button has been pressed, which means the processor is constantly executing code and thus using power. An interrupt solves this issue. The interrupt serves as a way to detect a button press at any time in the code, eliminating polling. After an interrupt occurs, an interrupt function is entered called an "interrupt service routine" or "ISR".
+  
+## Usage:
+While polling requires less setup: the button's pin simply needs to be set as an input, and maybe have a pull-up resistor, a button interrupt requires some additional specification to work properly:
+```c
+P5DIR &= ~BIT5; //SET P5.5 AS INPUT
+P5REN |= BIT5; //ENABLED PULL UP OR DOWN FOR P5.5
+P5OUT |= BIT5; //SPECIFIED AS A PULLUP FOR P5.5
+P5IE |= BIT5;   //SET P5.5 INTERRUPT ENABLED (S2)
+P5IFG &= ~BIT5; //P5.5 IFG CLEARED
+```
+This code is the basic setup to have a pin set as an input (P5DIR &= ~BIT5;), have a pull up resistor (P5REN |= BIT5; & P5OUT |= BIT5;), enable interrupt capability for this pin (P5IE |= BIT5;), and clear the interrupt flag (P5IFG &= ~BIT5;) to be sure an interrupt doesn't occur the instant the code begins. Of course, P5.5 is specific to one processor (the FR5994) and is replaced with different values depending on what pins the buttons are connected to on different processors:
+```c
+PxDIR &= ~BITy; //Px.y
+```
+With the button set up to cause an interrupt, the ISR must now be defined:
+```c
+#pragma vector=PORT5_VECTOR
+__interrupt void PORT_5(void)
 {
+    P1OUT ^= BIT0; //TURN ON LED
+    P5IFG &= ~BIT5; //P5.5 IFG CLEARED
+    P5IES ^= BIT5; //TOGGLE INTERRUPT EDGE
 }
-'''
+```
+Notice that since the FR5994 has it's buttons on PORT5 that the interrupt vector is ``` PORT5\_Vector ```. This is renamed for the different boards as ``` #pragma vector=PORTx_VECTOR ``` where x is the port number that the button set up for interrupts is on.
 
-While you still need to initialize the Ports to be interrupt enabled and clear the flags, this "Pragma Vector" tells the compiler that when a particular interrupt occurs, run this code. 
+``` PORT\_5 ``` on the line reading ``` __interrupt void PORT_5(void) ``` is an arbitrary variable name, and was named so for ease of reading the code.
 
-## A word of caution...
-While you might be willing to just jump straight in and begin using example code you may find, I would seriously take a few minutes and find a few good videos or tutorials to help understand exactly what is happening in the processor. I implore you to do this since you will inevitably have issues in the future which are solved by not understanding how the processor processes interrupts. A prime example is when I once tried implementing UART and I did not realize that you had to clear a flag or else my code would get stuck in an infinite loop. Hours of my life are now gone thanks to me at the time not understanding how interrupts worked with the peripherals I was utilizing. A few resources I have used in the past include:
-* https://youtu.be/GR8S2XT47eI?t=1334
-* http://processors.wiki.ti.com/index.php/MSP430_LaunchPad_Interrupt_vs_Polling
-* http://www.simplyembedded.org/tutorials/msp430-interrupts/
-
-## Task
-Your goal for this part of the lab is to replicate your button code from Lab 2, where the LED should change states only when the button is pressed. This can be extended to include behaviors such as only have the LED on when the button is depressed, or have the LED blink one color when pressed and another when it is let go. Another behavior extends from the second lab which is speed control based on the button presses. For example, have the rate of the LED cycle between a "low", "Medium", and "High" rate of speed.
-
-## Extra Work 
-### Binary Counter/Shift Register
-Either use a function generator, another processor, or a button to control your microcontroller as an 8-bit binary counter using 8 LEDs to indicate the current status of the counter.
-
-### Multiple Buttons
-Come up with a behavior of your own that incorporates needing to use two buttons or more and these two buttons must be implemented using interrupts.
-
-### (Recommended) Energy Trace
-Using the built in EnergyTrace(R) software in CCS and the corresponding supporting hardware on the MSP430 development platforms, analyze the power consumption between the button based blink code you wrote last week versus this week. What can you do to decrease the amount of power used within the microcontroller in this code? Take a look at the MSP430FR5994 and the built in SuperCap and see how long your previous code and the new code lasts. For a quick intro to EnergyTrace(R), take a look at this video: https://youtu.be/HqeDthLrcsg
+The flag is cleared again inside the ISR ``` P5IFG &= ~BIT5; ``` and the interrupt edge is toggled by XORing the interrupt edge select with BIT5 ``` P5IES ^= BIT5; ```. This is done so that as long as the button is being held, a new interrupt occurs nearly instantaneously, causing the LED to stay on as long as the button is pressed.
