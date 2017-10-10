@@ -44,6 +44,15 @@
  Now, the button has been pressed for 10ms. The new blink toggle is once every 105ms, this means the time that the LED is on has increased by 5 ms and the time off by 5ms, thus the overall period has increased by 10ms(two iterations of the ISR). Thus for every 10ms that the button is pressed, the LED's period will increase by 10ms.
  
  ###### Note: the time it takes to run through the code makes the resolution of this method limited by 10ms steps.
+ ###### Note: there is a rollover2 and a second LED with identical code except it is at a constant 100ms cycle for comparison purposes:
+ ```c
+ if(rollover2>=10) // 10ms * num, where rollover>=num (10ms * 100 = 1s blink period)
+      {
+          P1OUT ^= BIT1;                            // Toggle P1.1
+          rollover2 = 0;
+      }
+ rollover2++;
+ ```
  
  # Extra Work
  For the FR5994, a manual reset was implemented for this project. this was done by polling for another button inside the ISR in the same fashion that the delay button was checked. This reset manually resets the rollover count to 0 and the delay back to 20. Furthermore, a second LED was used as a baseline 100ms blink rate to make the changes in blink rate more noticeable. The noteable changes in code are given below:
