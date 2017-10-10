@@ -53,7 +53,7 @@
       }
  rollover2++;
  ```
- 
+ ###### Note: This code is specifically for the FR5994, but the logical structure of it is the same for all of the boards. Timer & Port syntax varies across the boards.
  # Extra Work
  For the FR5994, a manual reset was implemented for this project. this was done by polling for another button inside the ISR in the same fashion that the delay button was checked. This reset manually resets the rollover count to 0 and the delay back to 20. Furthermore, a second LED was used as a baseline 100ms blink rate to make the changes in blink rate more noticeable. The noteable changes in code are given below:
  ```c
