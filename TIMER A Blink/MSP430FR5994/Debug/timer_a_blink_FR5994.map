@@ -1,7 +1,7 @@
 ******************************************************************************
                   MSP430 Linker PC v16.9.4                     
 ******************************************************************************
->> Linked Mon Oct 09 17:49:37 2017
+>> Linked Mon Oct 09 20:42:01 2017
 
 OUTPUT FILE NAME:   <timer_a_blink_FR5994.out>
 ENTRY POINT SYMBOL: "_c_int00_noargs_noexit_mpu"  address: 0000402a

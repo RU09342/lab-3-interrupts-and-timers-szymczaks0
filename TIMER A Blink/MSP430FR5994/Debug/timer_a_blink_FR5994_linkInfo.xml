@@ -2,7 +2,7 @@
 <link_info>
    <banner>MSP430 Linker PC v16.9.4.LTS</banner>
    <copyright>Copyright (c) 2003-2017 Texas Instruments Incorporated</copyright>
-   <link_time>0x59dbeef1</link_time>
+   <link_time>0x59dc1759</link_time>
    <link_errors>0x0</link_errors>
    <output_file>timer_a_blink_FR5994.out</output_file>
    <entry_point>
