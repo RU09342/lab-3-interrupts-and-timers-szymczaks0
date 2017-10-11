@@ -5,7 +5,7 @@
   Previously, the only differences between processors that had to be accounted for were their PORT allocations. For example, P1.1 might be a button on one board, an LED on another, or an unnassigned pin on another. Now that timers are being utilized, the differences between processors become slightly more complex. For example, Timer A exists on all processors except the FR2311 which only has a Timer B. Furthermore, syntax differs between processors as well. The use of the following functions will be explained in more detail, but here is an example of how two processors differ with syntax:
   ```c
   TA0CTL = TASSEL_2 + MC_1;         //setting up a timer for the FR5994
-  TB0CTL = TBSSEL__SMCLK | MC__UP;  //has significantly different syntax than the FR2311
+  TB0CTL = TBSSEL__SMCLK | MC__UP;  //there is significantly different syntax on the FR2311
   TACTL = TASSEL_2 + MC_1;          //and different still for the G2553
   ```
 ## Basics of Timer A
