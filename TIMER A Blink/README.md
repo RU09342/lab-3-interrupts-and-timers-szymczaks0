@@ -81,4 +81,4 @@ if(rollover1>=32) // 10ms * num, where rollover>=num (10ms * 100 = 1s blink peri
       rollover2++;
 //...
 ```
-32 and 9 were arbitrary numbers that showcase that the LEDs can toggle at rates that aren't even multiples of each other. Furthermore, it can be noted that 32 and 9 could be replaced with variables that change with button presses. This exact functionality is implemented for the button delay portion of this lab.
+32 and 9 were arbitrary numbers that showcase that the LEDs can toggle at rates that aren't even multiples of each other. Furthermore, it can be noted that 32 and 9 could be replaced with variables that change with button presses. This exact functionality is implemented for the button delay portion of lab 4.
